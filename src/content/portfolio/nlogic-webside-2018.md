@@ -6,7 +6,6 @@ clientColor: "#de332a"
 projectType: "other"
 ---
 
-Avesta bisto nLogic AS med migrering av sin webside til en ny hosting løsning,
-og har siden 2018 driftet og videreutviklet websiden.
+Avesta bisto nLogic AS med migrering av sin webside til en ny hosting løsning, og har siden 2018 driftet og videreutviklet websiden.
 
 [https://www.nlogic.no](https://www.nlogic.no)

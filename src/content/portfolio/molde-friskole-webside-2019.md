@@ -9,5 +9,4 @@ projectType: "website"
 
 Avesta leverte ny website til Molde Friskole i mars 2019.
 
-Websiden er levert via [Webflow](https://webflow.com/), siden kunden hadde et
-ønske om å enkelt kunne administrere innholdet av websiden på egenhånd.
+Websiden er levert via [Webflow](https://webflow.com/), siden kunden hadde et ønske om å enkelt kunne administrere innholdet av websiden på egenhånd.
