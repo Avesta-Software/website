@@ -1,0 +1,179 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
+
+import BaseLayout from "~layouts/BaseLayout.astro";
+import logo from "~assets/avesta-logo.png";
+
+export async function getStaticPaths() {
+  const portfolioEntries = await getCollection("portfolio");
+
+  return portfolioEntries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const entry: CollectionEntry<"portfolio"> = Astro.props.entry;
+
+const allImages = import.meta.glob("../../content/portfolio/_img/*.{png,jpg}");
+
+function loadLogo() {
+  const name = entry.data.clientName.toLowerCase().replace(/\s+/g, "-");
+  let imgPath = `../../content/portfolio/_img/${name}-logo.png`;
+
+  if (!allImages[imgPath]) {
+    imgPath = `../../content/portfolio/_img/${name}-logo.jpg`;
+  }
+
+  if (!allImages[imgPath]) {
+    throw new Error(
+      `Found no logo for client ${entry.data.clientName}` +
+        ` (${name}-logo.{png,jpg})`,
+    );
+  }
+
+  return allImages[imgPath]();
+}
+
+function loadImage(type: "desktop" | "tablet" | "phone" | "main") {
+  let imgPath;
+
+  if (type == "main") {
+    imgPath = `../../content/portfolio/_img/${entry.slug}.png`;
+  } else {
+    imgPath = `../../content/portfolio/_img/${entry.slug}-${type}.png`;
+  }
+
+  if (!allImages[imgPath]) {
+    throw new Error(`Image not found, please add it: ${imgPath}`);
+  }
+
+  return allImages[imgPath]();
+}
+
+const images =
+  entry.data.projectType == "website"
+    ? {
+        logo: loadLogo(),
+        desktop: loadImage("desktop"),
+        tablet: loadImage("tablet"),
+        phone: loadImage("phone"),
+      }
+    : {
+        logo: loadLogo(),
+        main: loadImage("main"),
+      };
+
+const { Content } = await entry.render();
+---
+
+<BaseLayout>
+  <header>
+    <a href="/">
+      <div class="mx-auto my-12 w-[200px]">
+        <Image alt="Avesta Logo" src={logo} />
+      </div>
+    </a>
+
+    <div class="custom-container">
+      <div class="flex flex-col items-center justify-between md:flex-row">
+        <div class="mb-12 text-center md:mb-0 md:text-left">
+          <div class="w-full font-title text-4xl font-light">
+            {entry.data.clientName}
+          </div>
+          <div
+            class="font-title font-normal uppercase tracking-wider"
+            style={{ color: entry.data.textColor || entry.data.clientColor }}
+          >
+            {entry.data.summary}
+          </div>
+        </div>
+
+        <div
+          class:list={{
+            "rounded-md bg-white p-2": entry.data.logoIsDark,
+          }}
+        >
+          <Image alt="Client logo" src={images.logo} class="w-[250px]" />
+        </div>
+      </div>
+
+      <div class="separator light w-full"></div>
+    </div>
+  </header>
+
+  <main>
+    <div class="custom-container mb-12 md:mb-24">
+      <Content />
+    </div>
+
+    <style>
+      .lightdark-shadow {
+        box-shadow:
+          0 0 13px -2px rgba(0, 0, 0, 0.63),
+          0 0 100px -20px hsla(0, 0%, 100%, 0.15);
+      }
+    </style>
+
+    {
+      entry.data.projectType == "website" && (
+        <div class="mx-4 flex flex-wrap justify-evenly gap-20">
+          <div class="flex flex-col items-center gap-4">
+            <div
+              class="h-[75px] w-[75px] shrink-0 bg-cover bg-no-repeat invert"
+              style={{
+                backgroundImage:
+                  'url("data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9JzMwMHB4JyB3aWR0aD0nMzAwcHgnICBmaWxsPSIjMDAwMDAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMTAwIDEwMCIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PGc+PHBhdGggZD0iTTg4LDExSDEyYy0zLjksMC03LDMuMS03LDd2NTBjMCwzLjksMy4xLDcsNyw3aDI3LjdsLTEuNCwxMEgzNmMtMS4xLDAtMiwwLjktMiwyczAuOSwyLDIsMmgyOGMxLjEsMCwyLTAuOSwyLTJzLTAuOS0yLTItMiAgIGgtMi4zbC0xLjQtMTBIODhjMy45LDAsNy0zLjEsNy03VjE4Qzk1LDE0LjEsOTEuOSwxMSw4OCwxMXogTTksMjJoODJ2MzlIOVYyMnogTTEyLDE1aDc2YzEuNywwLDMsMS4zLDMsM0g5QzksMTYuMywxMC4zLDE1LDEyLDE1eiAgICBNNTcuNyw4NUg0Mi4zbDEuNC0xMGgxMi41TDU3LjcsODV6IE04OCw3MUgxMmMtMS43LDAtMy0xLjMtMy0zdi0zaDgydjNDOTEsNjkuNyw4OS43LDcxLDg4LDcxeiI+PC9wYXRoPjwvZz48L3N2Zz4=")',
+              }}
+            />
+            <Image
+              alt="Desktop screenshot"
+              src={images.desktop}
+              class="lightdark-shadow h-full w-auto rounded-md xs:max-h-[700px]"
+            />
+          </div>
+          <div class="flex flex-col items-center gap-4">
+            <div
+              class="h-[75px] w-[75px] shrink-0 bg-cover bg-no-repeat invert"
+              style={{
+                backgroundImage:
+                  'url("data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9JzMwMHB4JyB3aWR0aD0nMzAwcHgnICBmaWxsPSIjMDAwMDAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgOTAgOTAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDkwIDkwIiB4bWw6c3BhY2U9InByZXNlcnZlIj48cGF0aCBkPSJNNzEuMzMsMi4xNjdIMTcuNDIxYy0yLjc4OSwwLTUuMDQ4LDIuMzgyLTUuMDQ4LDUuMzIxdjc0Ljg5M2MwLDIuOTM4LDIuMjU5LDUuMzIxLDUuMDQ4LDUuMzIxSDcxLjMzICBjMi43ODcsMCw1LjA0Ny0yLjM4MSw1LjA0Ny01LjMyMVY3LjQ4OEM3Ni4zNzcsNC41NDksNzQuMTE3LDIuMTY3LDcxLjMzLDIuMTY3eiBNNDEuMTkzLDUuNTU3aDYuODUgIGMwLjUxMSwwLDAuOTI2LDAuMzExLDAuOTI2LDAuNjk0YzAsMC4zODQtMC40MTUsMC42OTQtMC45MjYsMC42OTRoLTYuODVjLTAuNTEyLDAtMC45MjUtMC4zMTEtMC45MjUtMC42OTQgIEM0MC4yNjgsNS44NjgsNDAuNjgyLDUuNTU3LDQxLjE5Myw1LjU1N3ogTTQ0LjM3Niw4NC41NDJjLTEuMjk3LDAtMi4zNS0xLjA1MS0yLjM1LTIuMzQ5YzAtMS4yOTcsMS4wNTEtMi4zNSwyLjM1LTIuMzUgIGMxLjI5OCwwLDIuMzQ4LDEuMDUzLDIuMzQ4LDIuMzVDNDYuNzI0LDgzLjQ5MSw0NS42NzQsODQuNTQyLDQ0LjM3Niw4NC41NDJ6IE03My4yMDIsNzYuNDE1SDE1LjU0N1YxMC42MjNoNTcuNjU1Vjc2LjQxNXoiPjwvcGF0aD48L3N2Zz4=")',
+              }}
+            />
+            <Image
+              alt="Tablet screenshot"
+              src={images.tablet}
+              class="lightdark-shadow h-full w-auto rounded-md xs:max-h-[700px]"
+            />
+          </div>
+          <div class="flex flex-col items-center gap-4">
+            <div
+              class="h-[75px] w-[75px] shrink-0 bg-cover bg-no-repeat invert"
+              style={{
+                backgroundImage:
+                  'url("data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9JzMwMHB4JyB3aWR0aD0nMzAwcHgnICBmaWxsPSIjMDAwMDAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMTAwIDEwMCIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik02OC40NjcsNS4yNEgzMS41MzNjLTMuMzMsMC02LjA1NCwyLjcyNC02LjA1NCw2LjA1NHY3Ny40MTIgIGMwLDMuMzMsMi43MjQsNi4wNTQsNi4wNTQsNi4wNTRoMzYuOTM0YzMuMzMsMCw2LjA1NS0yLjcyNCw2LjA1NS02LjA1NFYxMS4yOTRDNzQuNTIxLDcuOTY0LDcxLjc5Nyw1LjI0LDY4LjQ2Nyw1LjI0eiBNNTAsODkuNTU0ICBjLTIuMDgyLDAtMy43NzktMS42OTgtMy43NzktMy43NzlzMS42OTgtMy43NzksMy43NzktMy43NzlzMy43NzksMS42OTgsMy43NzksMy43NzlTNTIuMDgyLDg5LjU1NCw1MCw4OS41NTR6IE03MC44MjcsNzguMTMzICBIMjkuMTczVjEzLjEyMmg0MS42NTRWNzguMTMzeiI+PC9wYXRoPjwvc3ZnPg==")',
+              }}
+            />
+            <Image
+              alt="Phone screenshot"
+              src={images.phone}
+              class="lightdark-shadow h-full w-auto rounded-md xs:max-h-[700px]"
+            />
+          </div>
+        </div>
+      )
+    }
+
+    {
+      entry.data.projectType == "other" && (
+        <Image
+          alt="Project screenshot"
+          src={images.main}
+          class="mx-auto my-24 max-w-[calc(100%-20px)] rounded-md"
+        />
+      )
+    }
+  </main>
+</BaseLayout>

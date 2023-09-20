@@ -1,0 +1,88 @@
+---
+import "~style.css";
+---
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Avesta</title>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css"
+      integrity="sha512-NmLkDIU1C/C88wi324HBc+S2kLhi08PN5GDeUVVVC/BVt/9Izdsc9SVeVfA1UZbY3sHUlDSyRXhCzHfr6hmPPw=="
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400&family=Montserrat&family=Open+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+      integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/basicscroll/3.0.4/basicScroll.min.js"
+      integrity="sha512-T1yaKggYXzXjI5nSHQzoAPySuaa3RSkFmrcN/23tyFf2Z/utybWYwfYkELFTKt8EF24MGAB74uKj04bd+UR29Q=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"></script>
+    <script
+      async=""
+      src="https://www.googletagmanager.com/gtag/js?id=UA-90710012-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "UA-90710012-1", {
+        page_location: location.href,
+      });
+    </script>
+    <script src="https://carrier.formcarry.com/js/v1.js"></script>
+  </head>
+  <body>
+    <div id="backplane"></div>
+
+    <script is:inline>
+      basicScroll
+        .create({
+          elem: document.getElementById("backplane"),
+          from: 1,
+          to: 10000,
+          direct: true,
+          props: {
+            "--backplane-translate-y": {
+              from: "-10px",
+              to: "-1300px",
+            },
+          },
+        })
+        .start();
+
+      basicScroll
+        .create({
+          elem: document.getElementById("backplane"),
+          from: 1000,
+          to: 2500,
+          direct: true,
+          props: {
+            "--backplane-opacity": {
+              from: "1",
+              to: "0.5",
+            },
+          },
+        })
+        .start();
+    </script>
+
+    <div class="relative z-[1]">
+      <slot />
+    </div>
+  </body>
+</html>
