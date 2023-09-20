@@ -4,13 +4,17 @@ import { ViewTransitions } from "astro:transitions";
 import "~style.css";
 ---
 
-<html transition:animate="none">
+<html transition:animate="none" lang="nb">
   <head>
     <ViewTransitions />
 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
+    <meta
+      name="description"
+      content="Avesta leverer websider, hosting, software utvikling og andre IT tjenester"
+    />
     <title>Avesta</title>
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
