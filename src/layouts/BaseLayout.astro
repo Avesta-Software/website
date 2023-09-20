@@ -1,9 +1,13 @@
 ---
+import { ViewTransitions } from "astro:transitions";
+
 import "~style.css";
 ---
 
-<html>
+<html transition:animate="none">
   <head>
+    <ViewTransitions />
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
@@ -46,8 +50,8 @@ import "~style.css";
     </script>
     <script src="https://carrier.formcarry.com/js/v1.js"></script>
   </head>
-  <body>
-    <div id="backplane"></div>
+  <body transition:animate="slide">
+    <div id="backplane" transition:persist="backplane"></div>
 
     <script is:inline>
       basicScroll

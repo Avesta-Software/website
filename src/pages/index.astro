@@ -54,40 +54,46 @@ async function resolveMainImage(
       }
     </style>
 
-    <script>
-      let instance = basicScroll.create({
-        elem: document.getElementById("avesta-logo"),
-        from: 0,
-        to: 900,
-        direct: true,
-        props: {
-          "--avesta-logo-translate-y": {
-            from: "0px",
-            to: "-300px",
+    <script is:inline>
+      const startLogoAnimation = () => {
+        let instance = basicScroll.create({
+          elem: document.getElementById("avesta-logo"),
+          from: 0,
+          to: 900,
+          direct: true,
+          props: {
+            "--avesta-logo-translate-y": {
+              from: "0px",
+              to: "-300px",
+            },
+            "--avesta-logo-scale": {
+              from: "1",
+              to: "0.2",
+              timing: "sineIn",
+            },
+            "--avesta-logo-blur": {
+              from: "0px",
+              to: "10px",
+              timing: "cubicIn",
+            },
+            "--avesta-logo-opacity": {
+              from: "1",
+              to: "-0.3",
+              timing: "sineIn",
+            },
           },
-          "--avesta-logo-scale": {
-            from: "1",
-            to: "0.2",
-            timing: "sineIn",
-          },
-          "--avesta-logo-blur": {
-            from: "0px",
-            to: "10px",
-            timing: "cubicIn",
-          },
-          "--avesta-logo-opacity": {
-            from: "1",
-            to: "-0.3",
-            timing: "sineIn",
-          },
-        },
-      });
+        });
 
-      instance.start();
+        instance.start();
 
-      requestAnimationFrame(() => {
-        instance.update();
-      });
+        requestAnimationFrame(() => {
+          instance.update();
+        });
+      };
+
+      startLogoAnimation();
+
+      document.addEventListener("astro:after-swap", startLogoAnimation);
     </script>
   </header>
 
