@@ -124,28 +124,6 @@ body {
   line-height: 1.7em;
 }
 
-#backplane {
-  --backplane-translate-y: -10;
-  --backplane-opacity: 1;
-
-  position: fixed;
-  top: 0px;
-  right: 0px;
-  left: 0px;
-  z-index: 0;
-  background-image: url(/images/avesta_background.jpg);
-  background-repeat: no-repeat;
-  background-position-x: center;
-  background-position-y: 0px;
-  background-size: cover;
-
-  will-change: transform, opacity;
-  transform: translateY(var(--backplane-translate-y));
-  opacity: var(--backplane-opacity);
-
-  aspect-ratio: 2400/1228;
-}
-
 @media (max-width: 1920px) {
   #backplane {
     background-image: url(/images/avesta_background_1920.jpg);

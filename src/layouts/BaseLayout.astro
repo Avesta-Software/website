@@ -57,10 +57,36 @@ import "~style.css";
   <body>
     <div id="backplane" transition:persist="backplane"></div>
 
-    <script is:inline>
+    <style>
+      #backplane {
+        --backplane-translate-y: -10;
+        --backplane-opacity: 1;
+
+        position: fixed;
+        top: 0px;
+        right: 0px;
+        left: 0px;
+        z-index: 0;
+        background-image: url(/images/avesta_background.jpg);
+        background-repeat: no-repeat;
+        background-position-x: center;
+        background-position-y: 0px;
+        background-size: cover;
+
+        will-change: transform, opacity;
+        transform: translateY(var(--backplane-translate-y));
+        opacity: var(--backplane-opacity);
+
+        aspect-ratio: 2400/1228;
+      }
+    </style>
+
+    <script is:inline type="module">
+      const backplane = document.getElementById("backplane");
+
       basicScroll
         .create({
-          elem: document.getElementById("backplane"),
+          elem: backplane,
           from: 1,
           to: 10000,
           direct: true,
@@ -75,7 +101,7 @@ import "~style.css";
 
       basicScroll
         .create({
-          elem: document.getElementById("backplane"),
+          elem: backplane,
           from: 1000,
           to: 2500,
           direct: true,

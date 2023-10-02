@@ -45,7 +45,7 @@ async function resolveMainImage(
         --avesta-logo-translate-y: 0px;
         --avesta-logo-scale: 1;
         --avesta-logo-blur: 0px;
-        --avesta-logo-opacity: 1;
+        --avesta-logo-opacity: 0;
 
         transform: translateY(var(--avesta-logo-translate-y))
           scale(var(--avesta-logo-scale));
@@ -54,10 +54,12 @@ async function resolveMainImage(
       }
     </style>
 
-    <script is:inline>
+    <script is:inline type="module">
+      const logo = document.getElementById("avesta-logo");
+
       const startLogoAnimation = () => {
         let instance = basicScroll.create({
-          elem: document.getElementById("avesta-logo"),
+          elem: logo,
           from: 0,
           to: 900,
           direct: true,
