@@ -81,8 +81,8 @@ export function ContactForm() {
       const response = await fetch("https://formcarry.com/s/rGXRKGIYq2sH", {
         method: "POST",
         headers: {
-          ContentType: "application/json",
-          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Accept": "application/json",
         },
         body: JSON.stringify(values()),
       });
